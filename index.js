@@ -13,8 +13,9 @@ app.get('/', function(request, response) {
 
 app.post('/rsvp', function(req, res) {
   var userName = req.body.user_name;
+  var eventName = "pizza";
   var botPayload = {
-    text : 'Hello, ' + userName + '!'
+    text : 'Successfully RSVPed for ' + eventName + '! ' + req.body.command
   };
 
   // avoid infinite loop
