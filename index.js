@@ -8,6 +8,11 @@ app.get('/', function(request, response) {
   response.send('Hello World!');
 });
 
+app.post('/rsvp', function(request, response) {
+  console.log("rsvp received");
+  response.send('Hello World!');
+});
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
