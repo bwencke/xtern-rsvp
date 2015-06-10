@@ -106,8 +106,7 @@ app.post('/event', function(req, res) {
 
       var text = "No one has RSVPed for this event. Better luck next time.";
       if(event.people) {
-        text = event.people.length + " awesome peeps have RSVPed for " + event.name;
-        text += "They are:\n";
+        text = event.people.length + " awesome peeps have RSVPed for " + event.name + "\n";
         event.people.forEach(function(person) {
           text += person + "\n"
         });
