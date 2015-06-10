@@ -31,65 +31,113 @@ app.get('/', function(request, response) {
 });
 
 app.get('/add', function(request, response) {
-  var e = new Event({
-    name: 'Example Event',
-    id: 'exampleEvent',
-    time: new Date,
-    location: 'Somewhere',
-    limit: 50,
-    people: ['bwencke', 'someone']
-  });
-  e.save(function(err) {
-  if (err) throw err;
-
-  console.log('Event saved successfully!');
-});
   response.render('add.html');
 });
 
 app.post('/rsvp', function(req, res) {
   var userName = req.body.user_name;
   var eventId = req.body.text;
+  var text = "hello";
 
-  try {
-    var event = getEvent(eventId);
-  } catch(e) {
-    res.send("Sorry, we couldn't find an event with the id \"" + eventId + "\".");
-    return;
-  }
+  Event.findOne({ id: eventId }, function(err, event) {
+    if (err || !event) {
+      text = "Sorry, we couldn't find an event with the id \"" + eventId + "\".";
+      res.send(text);
+    } else {
+      // object of the event
+      console.log(event);
 
-  var eventName = (event.name == null) ? "undefined" : event.name;
-  addUser(event, userName);
+      var eventName = (!event.name) ? "undefined" : event.name;
+      var addRet = addUser(event, userName);
+      if(!addRet) {
+        text = "You've already RSVPed for \"" + eventName + "!\"";
+        res.send(text);
+      } else if(addRet == 2) {
+        text = "Sorry, \"" + eventName + "\" is already full!";
+        res.send(text);
+      } else {
+        event.save(function(err) {
+          if (err) {
+            text = "RSVP for the event \"" + eventName + "\" failed.";
+            res.send(text);
+          } else {
+            console.log('Event saved successfully!');
+            text = "Successfully RSVPed for \"" + eventName + "\"!";
+            res.send(text);
+          }
+        });
+      }
+    }
 
-  try {
-    event.save(function(err) {
-      if (err) throw err;
+  });
+});
 
-      console.log('Event saved successfully!');
-    });
-  } catch(e) {
-    res.send("RSVP for the event \"" + eventName + "\" failed.");
-    return;
-  }
+app.post('/add', function(req, res) {
+  var name = req.body.name;
+  var id = req.body.tag;
+  var limit = req.body.limit || 1000;
 
-  res.send("Successfully RSVPed for \"" + eventName + "\"!");
+  var e = new Event({
+    name: name,
+    id: id,
+    time: new Date,
+    location: 'Somewhere',
+    limit: limit,
+    people: []
+  });
+  e.save(function(err) {
+  if (err) throw err;
+
+  console.log('Event saved successfully!');
+  res.send("Event successfully created! RSVP using /rsvp " + id)
+  });
+});
+
+app.post('/event', function(req, res) {
+  var eventId = req.body.text;
+
+  Event.findOne({ id: eventId }, function(err, event) {
+    if (err || !event) {
+      text = "Sorry, we couldn't find an event with the id \"" + eventId + "\".";
+      res.send(text);
+    } else {
+      // object of the event
+      console.log(event);
+
+      var text = "No one has RSVPed for this event. Better luck next time.";
+      if(event.people) {
+        text = event.people.length + " awesome peeps have RSVPed for " + event.name;
+        text += "They are:\n";
+        event.people.forEach(function(person) {
+          text += person + "\n"
+        });
+      }
+      res.send(text);
+    }
+
+  });
+
 });
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
-function getEvent(eventId) {
-  Event.find({ id: eventId }, function(err, event) {
-    if (err) throw err;
-
-    // object of the event
-    console.log(event);
-  });
-}
-
 function addUser(event, userName) {
+  var ret = 1;
+  if(!event.people) {
+    event.people = [];
+  }
+  if(event.people.length == event.limit) {
+    ret = 2;
+  }
+  event.people.forEach(function(person) {
+    if(person == userName) {
+      ret = 0;
+    }
+  });
   event.people.push(userName);
+  return ret;
 }
 
 module.exports = Event;

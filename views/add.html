@@ -1,1 +1,74 @@
-add
+<!DOCTYPE html>
+<html>
+<head>
+<title>Xtern Event Manager</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body style="margin:100px">
+
+  <form class="form-horizontal" method="post" action="/add">
+  <fieldset>
+
+  <!-- Form Name -->
+  <legend>Add Event</legend>
+
+  <!-- Text input-->
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="name">Name</label>
+    <div class="col-md-6">
+    <input id="name" name="name" type="text" placeholder="Family Dinner" class="form-control input-md" required="">
+
+    </div>
+  </div>
+
+  <!-- Prepended text-->
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="tag">Tag</label>
+    <div class="col-md-6">
+      <div class="input-group">
+        <span class="input-group-addon">/rsvp</span>
+        <input id="tag" name="tag" class="form-control" placeholder="familyDinner" type="text" required="">
+      </div>
+      <p class="help-block">Usage: /rsvp familyDinner NO SPACES ALLOWED</p>
+    </div>
+  </div>
+
+  <!-- Text input-->
+  <!-- <div class="form-group">
+    <label class="col-md-4 control-label" for="location">Location</label>
+    <div class="col-md-6">
+    <input id="location" name="location" type="text" placeholder="410 Limestone" class="form-control input-md">
+
+    </div>
+  </div> -->
+
+  <!-- Text input-->
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="limit">Max # of People</label>
+    <div class="col-md-2">
+    <input id="limit" name="limit" type="text" placeholder="50" class="form-control input-md">
+    <span class="help-block">Blank = no limit</span>
+    </div>
+  </div>
+
+  <!-- Button -->
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="add"></label>
+    <div class="col-md-4">
+      <button id="add" name="add" class="btn btn-success">Add Event</button>
+    </div>
+  </div>
+
+  </fieldset>
+  </form>
+
+
+</body>
+</html>
