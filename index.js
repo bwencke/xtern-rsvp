@@ -104,12 +104,12 @@ app.post('/event', function(req, res) {
       // object of the event
       console.log(event);
 
-      var text = "No one has RSVPed for this event. Better luck next time.";
+      var text = "No one has RSVPed for \"" + event.name + "\". Better luck next time.";
       if(event.people && event.people.length > 0) {
         if(event.people.length == 1) {
           text = "Only 1 super awesome peep has RSVPed for " + event.name + ":\n";
         } else {
-          text = event.people.length + " awesome peeps have RSVPed for " + event.name + ":\n";
+          text = event.people.length + " awesome peeps have RSVPed for \"" + event.name + "\":\n";
         }
         event.people.forEach(function(person) {
           text += person + "\n"
